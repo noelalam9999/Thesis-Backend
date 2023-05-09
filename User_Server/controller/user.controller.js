@@ -38,4 +38,21 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const profile = async (req, res) => {
+  try {
+    res.status(200).send(req.user);
+  } catch (error) {
+    res.status(404).send({ message: "User not Found" });
+  }
+};
+
+const logout = (req, res) => {
+  res.clearCookie("token");
+  const accessToken = req.cookies.token;
+  if (accessToken) {
+    invalidateToken(accessToken);
+  }
+  res.redirect("/login");
+};
+
+module.exports = { register, login, profile, logout };
