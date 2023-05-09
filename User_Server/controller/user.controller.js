@@ -1,8 +1,9 @@
 const User = require("../model/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
-const SECRET_KEY = process.env.SECRET_KEY || "Whatever";
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const register = async (req, res) => {
   const { email, password } = req.body;

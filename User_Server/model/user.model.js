@@ -1,15 +1,18 @@
 const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  address: { type: String, required: true },
-  password: { type: String, required: true },
+  name: String,
+  email: String,
+  phone: String,
+  address: String,
+  password: String,
   type: {
     type: String,
-    required: true,
+    default: "individual",
     enum: ["individual", "corporate", "super_admin"],
+  },
+  profilePic: {
+    type: String,
   },
 });
 
