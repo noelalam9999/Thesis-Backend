@@ -34,7 +34,7 @@ const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const update = req.body;
-
+      
     const result = await Order.findByIdAndUpdate(id, update, {
       new: true,
     });
