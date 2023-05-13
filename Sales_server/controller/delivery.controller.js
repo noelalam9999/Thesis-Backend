@@ -1,12 +1,13 @@
 const axios = require('axios');
-const Order = require('./../models/order.model');
-const User = require('./../models/user.model');
-const Lab = require('../models/labDetails.model');
+const Order = require('./../model/order.model');
+// const User = require('./../models/user.model');
+// const Lab = require('../models/labDetails.model');
 // const { findClosestStudio } = require('../utils/helpers/nearestLabFinder');
 
-const baseUrl = process.env.PATHAO_BASE_URL;
+const baseUrl = "https://api-hermes.pathao.com";
 
 const pathaoAccessToken = async (req, res, next) => {
+  console.log(baseUrl)
   const issueBody = {
     client_id: process.env.PATHAO_CLIENT_ID,
     client_secret: process.env.PATHAO_CLIENT_SECRET,
@@ -82,15 +83,13 @@ const createOrder = async (req, res, next) => {
   const { id } = req.body;
   try {
     const order = await Order.findById(id);
-    const labUser = await Lab.findOne({ labId: order.labId });
-    console.log(labUser);
     orderDetails = {
       store_id: '' + order.labId,
       merchant_order_id: '',
-      sender_name: labUser.labDetails.contact_name,
-      sender_phone: labUser.labDetails.contact_number.slice(-11),
-      recipient_name: order.orderDelivaryDetails.name,
-      recipient_phone: order.orderDelivaryDetails.contact_number.slice(-11),
+      sender_name: "Noel",
+      sender_phone: "01740035118",
+      recipient_name: "Asif",
+      recipient_phone: "01",
       recipient_address: order.orderDelivaryDetails.address,
       recipient_city: '' + order.orderDelivaryDetails.city.city_id,
       recipient_zone: '' + order.orderDelivaryDetails.zone.zone_id,
@@ -141,7 +140,7 @@ const createOrder = async (req, res, next) => {
 //   }
 // };
 
-const patahaoPriceCalc = async (req, res, next) => {
+const pathaoPriceCalc = async (req, res, next) => {
   try {
     let { store_id, pathaoToken } = req.body;
     store_id = '' + store_id;
@@ -179,7 +178,6 @@ module.exports = {
   pathaoAccessToken,
   pathaoZones,
   pathaoAreas,
-  pathaoFindClosestStudio,
-  patahaoPriceCalc,
+  pathaoPriceCalc,
   createOrder,
 };
