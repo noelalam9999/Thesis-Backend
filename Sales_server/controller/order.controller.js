@@ -1,6 +1,7 @@
 const Order = require("../model/order.model");
 
 const newOrder = async (req, res) => {
+  console.log("inside post")
   try {
     const { shippingAddress, quantity, price, phonenumber } = req.body;
     const user_id = "123";
@@ -19,6 +20,7 @@ const newOrder = async (req, res) => {
   }
 };
 const getOrder = async (req, res) => {
+  console.log("inside get")
   try {
     const OrderInfo = await Order.find();
     res.status(200);
@@ -31,6 +33,7 @@ const getOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
+  console.log("inside put")
   try {
     const { id } = req.params;
     const update = req.body;
@@ -48,6 +51,7 @@ const updateOrder = async (req, res) => {
 };
 
 const deleteOrder = async (req, res) => {
+  
   try {
     const { id } = req.params;
     const result = await Order.findByIdAndDelete(id);
