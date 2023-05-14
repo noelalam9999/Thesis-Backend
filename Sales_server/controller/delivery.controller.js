@@ -1,5 +1,5 @@
-const axios = require('axios');
-const Order = require('./../model/order.model');
+const axios = require("axios");
+const Order = require("./../model/order.model");
 // const User = require('./../models/user.model');
 // const Lab = require('../models/labDetails.model');
 // const { findClosestStudio } = require('../utils/helpers/nearestLabFinder');
@@ -7,7 +7,7 @@ const Order = require('./../model/order.model');
 const baseUrl = "https://api-hermes.pathao.com";
 
 const pathaoAccessToken = async (req, res, next) => {
-  console.log(baseUrl)
+  console.log(baseUrl);
   const issueBody = {
     client_id: process.env.PATHAO_CLIENT_ID,
     client_secret: process.env.PATHAO_CLIENT_SECRET,
@@ -17,12 +17,12 @@ const pathaoAccessToken = async (req, res, next) => {
   };
   try {
     const pathaoToken = await axios.post(
-      baseUrl + '/aladdin/api/v1/issue-token',
+      baseUrl + "/aladdin/api/v1/issue-token",
       issueBody,
       {
         headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
         },
       }
     );
@@ -30,7 +30,28 @@ const pathaoAccessToken = async (req, res, next) => {
     res.send({ pathaoToken: pathaoToken.data });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ errorMessage: 'Cannot get access token' });
+    res.status(500).send({ errorMessage: "Cannot get access token" });
+  }
+};
+
+const City = {
+  1: {
+    id: 1,
+    city: "Dhaka",
+  },
+  2: {
+    id: 2,
+    city: "Chattagram",
+  },
+};
+
+const pathaoCity = async (req, res, next) => {
+  try {
+    const cities = Object.values(City);
+    res.status(200).json({ cities });
+  } catch (error) {
+    console.log(err);
+    res.status(500).send({ errorMessage: "Cannot get city" });
   }
 };
 
@@ -42,8 +63,8 @@ const pathaoZones = async (req, res, next) => {
       {
         headers: {
           authorization: `Bearer ${pathaoToken}`,
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
         },
       }
     );
@@ -64,8 +85,8 @@ const pathaoAreas = async (req, res, next) => {
       {
         headers: {
           authorization: `Bearer ${pathaoToken}`,
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
         },
       }
     );
@@ -84,25 +105,25 @@ const createOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(id);
     orderDetails = {
-      store_id: '' + order.labId,
-      merchant_order_id: '',
+      store_id: "" + order.labId,
+      merchant_order_id: "",
       sender_name: "Noel",
       sender_phone: "01740035118",
       recipient_name: "Asif",
       recipient_phone: "01",
       recipient_address: order.orderDelivaryDetails.address,
-      recipient_city: '' + order.orderDelivaryDetails.city.city_id,
-      recipient_zone: '' + order.orderDelivaryDetails.zone.zone_id,
+      recipient_city: "" + order.orderDelivaryDetails.city.city_id,
+      recipient_zone: "" + order.orderDelivaryDetails.zone.zone_id,
       recipient_area: order.orderDelivaryDetails.area
-        ? '' + order.orderDelivaryDetails.area.area_id
-        : '',
-      delivery_type: '48',
-      item_type: '2',
-      special_instruction: '',
-      item_quantity: '1',
-      item_weight: '0.5',
-      amount_to_collect: '0',
-      item_description: '',
+        ? "" + order.orderDelivaryDetails.area.area_id
+        : "",
+      delivery_type: "48",
+      item_type: "2",
+      special_instruction: "",
+      item_quantity: "1",
+      item_weight: "0.5",
+      amount_to_collect: "0",
+      item_description: "",
     };
 
     const store = await axios.post(
@@ -111,8 +132,8 @@ const createOrder = async (req, res, next) => {
       {
         headers: {
           authorization: `Bearer ${pathaoToken}`,
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
         },
       }
     );
@@ -143,12 +164,12 @@ const createOrder = async (req, res, next) => {
 const pathaoPriceCalc = async (req, res, next) => {
   try {
     let { store_id, pathaoToken } = req.body;
-    store_id = '' + store_id;
-    const item_type = '' + 1;
-    const delivery_type = '' + 48;
-    const item_weight = '' + 0.5;
-    const recipient_city = '' + req.currentUser.details.city.city_id;
-    const recipient_zone = '' + req.currentUser.details.zone.zone_id;
+    store_id = "" + store_id;
+    const item_type = "" + 1;
+    const delivery_type = "" + 48;
+    const item_weight = "" + 0.5;
+    const recipient_city = "" + req.currentUser.details.city.city_id;
+    const recipient_zone = "" + req.currentUser.details.zone.zone_id;
     const priceEstimateData = await axios.post(
       `${baseUrl}/aladdin/api/v1/merchant/price-plan`,
       {
@@ -162,8 +183,8 @@ const pathaoPriceCalc = async (req, res, next) => {
       {
         headers: {
           authorization: `Bearer ${pathaoToken}`,
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
         },
       }
     );
@@ -176,6 +197,7 @@ const pathaoPriceCalc = async (req, res, next) => {
 
 module.exports = {
   pathaoAccessToken,
+  pathaoCity,
   pathaoZones,
   pathaoAreas,
   pathaoPriceCalc,
