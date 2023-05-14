@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const orderSchema = new Schema({
-  shippingAddress: { 
+  shippingAddress: {
     city : {
       city: {type: String, required: true},
       id : {type: Number, required: true}
@@ -13,7 +13,8 @@ const orderSchema = new Schema({
     area : {
       area_id : {type: Number, required: false},
       area_name : {type: String, required: true}
-    }
+    },
+    fullAddress : {type: String, required: false}
   },
   quantity: { type: Number, required: true },
   paymentStatus : { type: String, required: false },
