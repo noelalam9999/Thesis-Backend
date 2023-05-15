@@ -11,7 +11,7 @@ app.use(route);
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("connected successfully");
     app.listen(process.env.PORT, () => {
-      console.log(`erver running at http://localhost:${process.env.PORT}`);
+      console.log(`Server running at http://localhost:${process.env.PORT}`);
     });
   } catch (error) {
     console.log(error);
