@@ -101,30 +101,30 @@ const pathaoAreas = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
   console.log(req.body.pathaoToken);
   const { pathaoToken } = req.body;
-  const { id } = req.body;
+  const { changedOrder } = req.body;
   try {
-    const order = await Order.findById(id);
-    orderDetails = {
-      store_id: "" + order.labId,
-      merchant_order_id: "",
-      sender_name: "Noel",
-      sender_phone: "01740035118",
-      recipient_name: "Asif",
-      recipient_phone: "01",
-      recipient_address: order.orderDelivaryDetails.address,
-      recipient_city: "" + order.orderDelivaryDetails.city.city_id,
-      recipient_zone: "" + order.orderDelivaryDetails.zone.zone_id,
-      recipient_area: order.orderDelivaryDetails.area
-        ? "" + order.orderDelivaryDetails.area.area_id
-        : "",
-      delivery_type: "48",
-      item_type: "2",
-      special_instruction: "",
-      item_quantity: "1",
-      item_weight: "0.5",
-      amount_to_collect: "0",
-      item_description: "",
-    };
+    // const order = await Order.findById(id);
+    // orderDetails = {
+    //   store_id: "" + order.labId,
+    //   merchant_order_id: "",
+    //   sender_name: "Noel",
+    //   sender_phone: "01740035118",
+    //   recipient_name: "Asif",
+    //   recipient_phone: "01",
+    //   recipient_address: order.orderDelivaryDetails.address,
+    //   recipient_city: "" + order.orderDelivaryDetails.city.city_id,
+    //   recipient_zone: "" + order.orderDelivaryDetails.zone.zone_id,
+    //   recipient_area: order.orderDelivaryDetails.area
+    //     ? "" + order.orderDelivaryDetails.area.area_id
+    //     : "",
+    //   delivery_type: "48",
+    //   item_type: "2",
+    //   special_instruction: "",
+    //   item_quantity: "1",
+    //   item_weight: "0.5",
+    //   amount_to_collect: "0",
+    //   item_description: "",
+    // };
 
     const store = await axios.post(
       `${baseUrl}/aladdin/api/v1/orders`,
@@ -140,7 +140,7 @@ const createOrder = async (req, res, next) => {
     console.log(store.data);
     res.status(200).send(store.data);
   } catch (err) {
-    console.log(err.response.data);
+    console.log(err);
     res.status(401).send({ errorMessage: `Cannot create order` });
   }
 };
