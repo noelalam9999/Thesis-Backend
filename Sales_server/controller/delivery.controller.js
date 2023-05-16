@@ -57,6 +57,7 @@ const pathaoCity = async (req, res, next) => {
 
 const pathaoZones = async (req, res, next) => {
   const { pathaoToken, city_id } = req.body;
+  console.log("heat from reat", city_id);
   try {
     const zones = await axios.get(
       `${baseUrl}/aladdin/api/v1/cities/${city_id}/zone-list`,

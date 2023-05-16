@@ -1,7 +1,7 @@
 const Order = require("../model/order.model");
 
 const newOrder = async (req, res) => {
-  console.log("inside post")
+  console.log("inside post");
   try {
     const { shippingAddress, quantity, price, phonenumber } = req.body;
     const user_id = "123";
@@ -9,7 +9,14 @@ const newOrder = async (req, res) => {
     const paymentStatus = "paid";
     const deliveryStatus = "pending";
     const result = await Order.create({
-      shippingAddress, quantity, paymentStatus, deliveryStatus, timeStamp, user_id, phonenumber, price
+      shippingAddress,
+      quantity,
+      paymentStatus,
+      deliveryStatus,
+      timeStamp,
+      user_id,
+      phonenumber,
+      price,
     });
     res.status(201);
     res.send(result);
@@ -20,7 +27,6 @@ const newOrder = async (req, res) => {
   }
 };
 const getOrder = async (req, res) => {
-  console.log("inside get")
   try {
     const OrderInfo = await Order.find();
     res.status(200);
@@ -33,11 +39,11 @@ const getOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
-  console.log("inside put")
+  console.log("inside put");
   try {
     const { id } = req.params;
     const update = req.body;
-      
+
     const result = await Order.findByIdAndUpdate(id, update, {
       new: true,
     });
@@ -51,7 +57,6 @@ const updateOrder = async (req, res) => {
 };
 
 const deleteOrder = async (req, res) => {
-  
   try {
     const { id } = req.params;
     const result = await Order.findByIdAndDelete(id);
