@@ -100,9 +100,10 @@ const pathaoAreas = async (req, res, next) => {
   }
 };
 const createOrder = async (req, res, next) => {
-  console.log(req.body.pathaoToken);
+  // res.send(req.body.orderDetails);
   const { pathaoToken } = req.body;
   const { orderDetails } = req.body;
+  console.log(orderDetails)
   try {
    
 
@@ -120,7 +121,7 @@ const createOrder = async (req, res, next) => {
     console.log(store.data);
     res.status(200).send(store.data);
   } catch (err) {
-    console.log(err.response.data);
+    console.log(err);
     res.status(401).send({ errorMessage: `Cannot create order` });
   }
 };

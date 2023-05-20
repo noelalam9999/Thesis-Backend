@@ -3,8 +3,8 @@ const Device = require("../model/device.model");
 const postDevice = async (req, res) => {
   try {
     const device = req.body;
-    const deviceConfigure = { ...device.device_configure };
-    device.device_configure = JSON.stringify(deviceConfigure);
+    // const deviceConfigure = { ...device.device_configure };
+    // device.device_configure = JSON.stringify(deviceConfigure);
     const result = await Device.create(device);
     res.status(201);
     res.send(result);
