@@ -1,8 +1,16 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 const mongoose = require("mongoose");
 const route = require("./route");
 require("dotenv").config();
+
+
+const corsConfig = {
+  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000'],
+  credentials: true,
+};
+app.use(cors(corsConfig));
 
 app.use(express.json());
 app.use(route);
