@@ -3,9 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
+const SECRET_KEY = process.env.JWT_SECRET_KEY ||"hihuha";
 
 const register = async (req, res) => {
+  console.log (req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
 
@@ -17,6 +18,25 @@ const register = async (req, res) => {
     const { _id } = await newUser.save();
     const accessToken = jwt.sign({ _id }, SECRET_KEY);
     res.status(201).send(accessToken);
+  } catch (error) {
+    res.status(400).send({ messages: "Could not create User" });
+  }
+};
+const gAuthRegister = async (req, res) => {
+  const { email } = req.body;
+  console.log('fromcnroller',req.body)
+  const user = await User.findOne({ email: email });
+
+  if (user) {
+    const accessToken = jwt.sign(user.email, SECRET_KEY);
+    return res.status(409).send({ message: "User already exists", userInfo: user, accessToken: accessToken });
+  }
+  try {
+    const newUser = new User(req.body );
+    const { _id , type} = await newUser.save();
+    const accessToken = jwt.sign({ _id }, SECRET_KEY);
+    // const message = "User Created Successfully";
+    res.status(201).send({accessToken:accessToken, userId:_id, type:type, message:"User Created Successfully"});
   } catch (error) {
     res.status(400).send({ messages: "Could not create User" });
   }
@@ -33,7 +53,7 @@ const login = async (req, res) => {
     if (!matchPass) throw new Error();
 
     const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
-    res.status(200).send({ accessToken });
+    res.status(200).send({ accessToken, type: user.type, id: user._id });
   } catch (error) {
     res.status(401).send({ messages: "Username or password is incorrect" });
   }
@@ -56,4 +76,21 @@ const logout = (req, res) => {
   res.redirect("/login");
 };
 
-module.exports = { register, login, profile, logout };
+const updateUserType = async (req, res) => {
+  try {
+    const { userId, type } = req.params;
+    const update = {type:type};
+      
+    const result = await User.findByIdAndUpdate(userId, update, {
+      new: true,
+    });
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(500);
+    console.log(error);
+    res.send(error);
+  }
+}
+
+module.exports = { register, login, profile, logout, gAuthRegister, updateUserType };

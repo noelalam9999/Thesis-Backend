@@ -2,7 +2,16 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const route = require("./route");
+
 require("dotenv").config();
+const cors = require('cors');
+
+const corsConfig = {
+  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000'],
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(route);
 
@@ -11,7 +20,7 @@ app.use(route);
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("connected successfully");
     app.listen(process.env.PORT, () => {
-      console.log(`erver running at http://localhost:${process.env.PORT}`);
+      console.log(`Server running at http://localhost:${process.env.PORT}`);
     });
   } catch (error) {
     console.log(error);

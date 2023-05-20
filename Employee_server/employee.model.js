@@ -4,8 +4,9 @@ const employeeSchema = new Schema({
   name: String,
   phone: String,
   department: String,
-  car_no: String,
+  vehicle_no: String,
   compnay: String,
+  image: String
 });
 
 const Employee = model("Employee", employeeSchema);
