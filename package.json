@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "start": "(cd Sales_server && nodemon ) & (cd Devices_server && nodemon) & (cd Employee_server && nodemon)"
+      "start": "(cd Sales_server && nodemon ) & (cd Devices_server && nodemon) & (cd Employee_server && nodemon)  & (cd User_Server && nodemon )"
     },
     "keywords": [],
     "author": "",
