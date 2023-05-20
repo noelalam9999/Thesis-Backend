@@ -4,6 +4,7 @@ const postEmployee = async (req, res) => {
   try {
     const result = await Employee.create(req.body);
     res.status(201);
+    console.log(result)
     res.send(result);
   } catch (error) {
     res.status(400);
@@ -16,7 +17,7 @@ const getEmployee = async (req, res) => {
   try {
     const result = await Employee.find();
     res.status(200);
-    res.send(deviceInfo);
+    res.send(result);
   } catch (error) {
     res.status(400);
     res.send(error);
