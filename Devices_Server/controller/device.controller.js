@@ -28,8 +28,9 @@ const getDevice = async (req, res) => {
 };
 const getDeviceByid = async (req, res) => {
   try {
-    const deviceId = req.params.id;
-    const deviceInfo = await Device.findById(deviceId);
+    const ru_id = req.params.ru_id;
+    const deviceInfo = await Device.findOne({ RU_id: ru_id });
+    // console.log(deviceInfo);
     if (!deviceInfo)
       return res.status(404).json({ message: "Device not found" });
     res.status(200);
@@ -42,10 +43,11 @@ const getDeviceByid = async (req, res) => {
 };
 const updateDevice = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { ru_id } = req.params;
+    //console.log(ru_id);
     const update = req.body;
 
-    const result = await Device.findByIdAndUpdate(id, update, {
+    const result = await Device.findOneAndUpdate({ RU_id: ru_id }, update, {
       new: true,
     });
     res.status(200);
