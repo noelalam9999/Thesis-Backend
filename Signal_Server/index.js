@@ -7,7 +7,7 @@ require("dotenv").config();
 
 
 const corsConfig = {
-  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000'],
+  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000','https://dash.vertical-innovations.com/'],
   credentials: true,
 };
 app.use(cors(corsConfig));

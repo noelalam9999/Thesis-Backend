@@ -130,4 +130,4 @@ async function getDevicesSumBySignalByDate (dates) {
 //   ]);
 // }
 
-module.exports = { createSignal,createSignals, getAll, getByDeviceRuId, getSignalSumByDateByDevices, getDevicesSumBySignalByDate};
+module.exports = { Signal, createSignal,createSignals, getAll, getByDeviceRuId, getSignalSumByDateByDevices, getDevicesSumBySignalByDate};
