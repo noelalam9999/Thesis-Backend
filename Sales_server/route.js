@@ -5,6 +5,7 @@ const deliveryController = require("./controller/delivery.controller");
 
 router.post("/order", ordercontroller.newOrder);
 router.get("/order", ordercontroller.getOrder);
+router.get("/order/user_id/:user_id", ordercontroller.getOrdersByUserId);
 router.put("/order/:id", ordercontroller.updateOrder);
 router.delete("/order/:id", ordercontroller.deleteOrder);
 

@@ -29,10 +29,24 @@ const getDevice = async (req, res) => {
 const getDeviceByid = async (req, res) => {
   try {
     const ru_id = req.params.ru_id;
-    const deviceInfo = await Device.findOne({ RU_id: ru_id });
+    const deviceInfo = await Device.find({ RU_id: ru_id });
     // console.log(deviceInfo);
     if (!deviceInfo)
       return res.status(404).json({ message: "Device not found" });
+    res.status(200);
+    res.send(deviceInfo);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
+const getDeviceByUserId = async (req, res) => {
+  try {
+    const user_id= req.params.user_id;
+    const deviceInfo = await Device.find({ user_id: user_id });
+    // console.log(deviceInfo);
+    if (!deviceInfo) return res.status(404).json({ message: "User not found" });
     res.status(200);
     res.send(deviceInfo);
   } catch (error) {
@@ -58,7 +72,7 @@ const updateDevice = async (req, res) => {
     res.send(error);
   }
 };
-const deletDevice = async (req, res) => {
+const deleteDevice = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await Device.findByIdAndDelete(id);
@@ -72,9 +86,10 @@ const deletDevice = async (req, res) => {
 };
 
 module.exports = {
+  getDeviceByUserId,
   postDevice,
   getDevice,
   getDeviceByid,
   updateDevice,
-  deletDevice,
+  deleteDevice,
 };

@@ -3,7 +3,6 @@ const { Schema, model } = require("mongoose");
 const deviceSchema = new Schema({
   RU_id: { type: String, required: true },
   qr_code: { type: String, required: true },
-  deviceName: { type: String, required: false },
   user_id: { type: String, required: false },
   pseudoname: { type: String, required: false },
   employee: {

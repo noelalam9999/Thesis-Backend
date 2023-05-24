@@ -102,32 +102,32 @@ async function getDevicesSumBySignalByDate (dates) {
   ]);
 }
 
-// async function getSignalSumByDevicesByDate (dates){
-//   console.log(dates[0],dates[1])
-//   return await Signal.aggregate([
-//     {
-//       $match : {
-//         $and : [
-//           {
-//             time : { 
-//               $gte : new Date(dates[0]),
-//               $lte: new Date(dates[1])
-//             }
-//           },
-//           {
-//             "horn" : "1"
-//           }  
-//         ] 
-//       },
-//     },
-//     {
-//       $group : {
-//         _id : '$deviceRUid',
-//         horn_count : {$sum : 1}
-//       }
-//     }
+async function getSignalSumByDevicesByDate (dates){
+  console.log(dates[0],dates[1])
+  return await Signal.aggregate([
+    {
+      $match : {
+        $and : [
+          {
+            time : { 
+              $gte : new Date(dates[0]),
+              $lte: new Date(dates[1])
+            }
+          },
+          {
+            "horn" : "1"
+          }  
+        ] 
+      },
+    },
+    {
+      $group : {
+        _id : '$deviceRUid',
+        horn_count : {$sum : 1}
+      }
+    }
    
-//   ]);
-// }
+  ]);
+}
 
-module.exports = { Signal, createSignal,createSignals, getAll, getByDeviceRuId, getSignalSumByDateByDevices, getDevicesSumBySignalByDate};
+module.exports = { Signal, createSignal,createSignals, getAll, getByDeviceRuId, getSignalSumByDateByDevices, getDevicesSumBySignalByDate, getSignalSumByDevicesByDate };

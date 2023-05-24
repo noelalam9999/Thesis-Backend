@@ -38,6 +38,18 @@ const getOrder = async (req, res) => {
   }
 };
 
+const getOrdersByUserId = async (req, res) => {
+  try {
+    const OrderInfo = await Order.find({user_id:req.params.user_id});
+    res.status(200);
+    res.send(OrderInfo);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
+
 const updateOrder = async (req, res) => {
 
   try {
@@ -72,6 +84,7 @@ const deleteOrder = async (req, res) => {
 module.exports = {
   newOrder,
   getOrder,
+  getOrdersByUserId,
   updateOrder,
   deleteOrder,
 };

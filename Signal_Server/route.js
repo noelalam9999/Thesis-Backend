@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const signalcontroller = require("./controller/signal.controller");
+const accumulationcontroller = require("./controller/accumulation.controller");
 
 // Route naming convention
 
@@ -16,5 +17,7 @@ router.post("/signal/DevicesSumBySignalByDate", signalcontroller.getDevicesSumBy
 
 // router.put("/signal/:id", signalcontroller.updateSignal);
 // router.delete("/signal/:id", signalcontroller.deleteSignal);
+router.post("/accumulations", accumulationcontroller.newAccumulations);
+router.get("/accumulations", accumulationcontroller.getAccumulations);
 
 module.exports = router;

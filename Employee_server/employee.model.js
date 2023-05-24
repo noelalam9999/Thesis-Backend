@@ -5,7 +5,7 @@ const employeeSchema = new Schema({
   phone: String,
   department: String,
   vehicle_no: String,
-  compnay: String,
+  company: String,
   image: String
 });
 

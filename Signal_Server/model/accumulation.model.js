@@ -1,5 +1,7 @@
 const { Schema, model } = require("mongoose");
-const {Signal} = require("./signal.model");
+// const {Signal} = require("./signal.model");
+const Distance = require('geo-distance');
+
 const accumulationSchema = new Schema({
   deviceRUid: { type: String, required: false },
   time: { type: Date, required: false }, 
@@ -11,25 +13,49 @@ const accumulationSchema = new Schema({
 const Accumulation = model("Accumulation", accumulationSchema);
 
 async function create(signals){
-  const lastSignal = Signal.findOne({deviceRUid:signals[0].deviceRUid}, {}, { sort: { 'created_at' : -1 } });  
-  if(latestAccumulatedSignal){
-    await Accumulation.create({
-   
-    });
-  }
-  // if(signals.length<1) {
-   
-         
-  //     }
-  const accumulation = signals.slice(1).map((item, key , arr)=>{
-    return {
+    const lastAcc = Accumulation.findOne({deviceRUid:signals[0].deviceRUid}, {}, { sort: { 'created_at' : -1 } });  
+    let accumulation = [];
+    if (!lastAcc){
+      accumulation.push({
       deviceRUid : signals[0].deviceRUid,
-      time : signals[0].time,
-      totalTime : signals[0].time
+      timeStamp : signals[0].time,
+      totalDistance : 0,
+      totalTime : 0,
+      totalHorns : 0,
+    });
     }
+    else{
+      accumulation.push({
+      deviceRUid : lastAcc.deviceRUid,
+      timeStamp : lastAcc.time,
+      totalDistance : 0,
+      totalTime : 0,
+      totalHorns : 0,
+    })
+    }
+    
 
-  })
-  return await Accumulation.insertMany(signals);
+    for (let i = 1; i < signals.length ; i++){
+      console.log(signals[i].gps.split(':')[0],signals[i-1].gps.split(':')[1]);
+      accumulation.push({
+      deviceRUid : signals[i].deviceRUid,
+      timeStamp : signals[i].time,
+      totalDistance : accumulation[i-1].totalDistance + Distance.between(
+        {
+          lat : signals[i].gps.split(':')[0],
+          long : signals[i].gps.split(':')[1]
+        },
+        {
+          lat : signals[i-1].gps.split(':')[0],
+          long : signals[i-1].gps.split(':')[1]
+        }
+       ),
+      totalTime : accumulation[i-1].totalTime + ((new Date(signals[i].time) - new Date(signals[i-1].time))/3600000),
+      totalHorns : parseInt(accumulation[i-1].totalHorns) + parseInt(signals[i].horn),
+      })
+    }
+  // return await Accumulation.insertMany(accumulation);
+  return accumulation
 };
 
 async function getAll(){

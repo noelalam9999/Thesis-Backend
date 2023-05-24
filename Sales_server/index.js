@@ -7,7 +7,7 @@ require("dotenv").config();
 const cors = require('cors');
 
 const corsConfig = {
-  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000'],
+  origin: [process.env.BASE_FRONTEND_URL, 'http://localhost:3000','http://localhost:3001'],
   credentials: true,
 };
 
