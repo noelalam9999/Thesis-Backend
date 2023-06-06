@@ -3,8 +3,8 @@ const Order = require("../model/order.model");
 const newOrder = async (req, res) => {
 
   try {
-    const { shippingAddress, quantity, price, phonenumber } = req.body;
-    const user_id = "123";
+    const { shippingAddress, quantity, price, phonenumber, user_id } = req.body;
+    // const user_id = user_id;
     const timeStamp = new Date();
     const paymentStatus = "paid";
     const deliveryStatus = "pending";
@@ -87,4 +87,5 @@ module.exports = {
   getOrdersByUserId,
   updateOrder,
   deleteOrder,
+  findOrdersByUserId
 };

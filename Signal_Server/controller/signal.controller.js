@@ -1,4 +1,11 @@
 const signalmodel = require("../model/signal.model");
+// const {io,connectedUsers} = require("../index");
+
+const app = require("../index");
+
+
+
+
 
 const newSignal = async (req, res) => {
   try {
@@ -11,6 +18,7 @@ const newSignal = async (req, res) => {
       horn,
       time
     );
+    
     res.status(201);
     res.send(result);
   } catch (error) {
@@ -22,10 +30,22 @@ const newSignal = async (req, res) => {
 
 const newSignals = async (req, res) => {
   try {
-    // const { deviceRUid, gps, gyro,time, horn } = req.body;
-    
     const result = await signalmodel.createSignals(req.body);
+    const sumOfSignalsByDate = await signalmodel.getSignalSumByDateByDevices([result[0].deviceRUid]);  
+    req.app.io.to(req.app.connectedUsers[result[0].deviceRUid]).emit('newSignal',sumOfSignalsByDate);
+    const cachedSignals = await req.app.redisClient.get("signals")
+    console.log(cachedSignals)
+    if(cachedSignals){
+      const signalsArray = await JSON.parse(cachedSignals)
+      console.log(signalsArray)
+      signalsArray = [...signalsArray, ...signals];
+      req.app.redisClient.set(signalsArray);
+    }
+    else {
+      req.app.redisClient.set("signals",JSON.stringify(result))
+    }
     res.status(201);
+    
     res.send(result);
   } catch (error) {
     res.status(400);
@@ -112,18 +132,18 @@ const getDevicesSumBySignalByDate = async (req, res) => {
 //   }
 // };
 
-// const deleteSignal = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const result = await Signal.findByIdAndDelete(id);
-//     res.status(200);
-//     res.send(result);
-//   } catch (error) {
-//     res.status(500);
-//     res.send(error);
-//     console.log(error);
-//   }
-// };
+const deleteSignal = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await Signal.findByIdAndDelete(id);
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(500);
+    res.send(error);
+    console.log(error);
+  }
+};
 
 module.exports = {
   newSignal,
@@ -132,6 +152,7 @@ module.exports = {
   getSignalByRUid,
   getSignalSumByDateByDevice,
   getSignalSumByDateByDevices,
-  getDevicesSumBySignalByDate
+  getDevicesSumBySignalByDate,
+  deleteSignal
 
 };

@@ -57,9 +57,36 @@ const deleteCompany = async (req, res) => {
   }
 };
 
+const getCompanyByOwner = async (req, res) => {
+  const {owner} = req.params;
+  try {
+    const result = await Company.find({owner: owner});
+    res.send(result);
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
+const getCompanyByCompanyId = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const result = await Company.find({_id: id});
+    res.send(result);
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
+
 module.exports = {
   getCompany,
   postCompany,
   updateCompany,
   deleteCompany,
+  getCompanyByOwner,
+  getCompanyByCompanyId
 };

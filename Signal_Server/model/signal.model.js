@@ -28,6 +28,14 @@ async function createSignal(
 
 async function createSignals(signals){
   return await Signal.insertMany(signals);
+  // .then((res)=>{
+  //   console.log(res)
+  //   return accumulationModel.create(res)
+  // }).then((res)=>{
+  //   console.log(res)
+  //   return res
+  // });
+  
 };
 
 async function getAll(){
@@ -60,6 +68,11 @@ async function getSignalSumByDateByDevices (deviceRUids) {
             $substr : ["$time",0,10]
         },
         horn_count : {$sum : 1}
+      }
+    },
+    {
+      $sort : {
+        "_id" : 1
       }
     }
    
@@ -103,7 +116,6 @@ async function getDevicesSumBySignalByDate (dates) {
 }
 
 async function getSignalSumByDevicesByDate (dates){
-  console.log(dates[0],dates[1])
   return await Signal.aggregate([
     {
       $match : {

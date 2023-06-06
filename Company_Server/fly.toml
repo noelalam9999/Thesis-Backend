@@ -1,10 +1,13 @@
-# fly.toml file generated for devices-service on 2023-05-21T17:43:04+06:00
+# fly.toml file generated for company-service on 2023-06-01T16:50:19+06:00
 
-app = "devices-service"
+app = "company-service"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "sin"
 processes = []
+
+[build]
+  builder = "heroku/buildpacks:20"
 
 [env]
   PORT = "8080"

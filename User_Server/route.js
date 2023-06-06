@@ -8,8 +8,8 @@ router.post("/register", usercontroller.register);
 router.post("/google/register", usercontroller.gAuthRegister);
 router.put("/updateType/:userId/:type", usercontroller.updateUserType);
 router.post("/login", usercontroller.login);
-router.get("/profile", authMiddleware, usercontroller.profile);
-router.post("/logout", authMiddleware, usercontroller.logout);
+router.get("/profile/:userid", usercontroller.profile);
+router.post("/logout", usercontroller.logout);
 
 //google register and login
 // router.post("/google/register", oauthcontroller.oauthRegsiter);

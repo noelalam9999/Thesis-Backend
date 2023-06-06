@@ -5,12 +5,13 @@ const deviceSchema = new Schema({
   qr_code: { type: String, required: true },
   user_id: { type: String, required: false },
   pseudoname: { type: String, required: false },
+  company_id: { type: String, required: false },
   employee: {
+    _id : String,
     name: String,
     phone: String,
     department: String,
     vehicle_no: String,
-    compnay: String,
     image: String
   },
   device_configure: { type: String, required: true },

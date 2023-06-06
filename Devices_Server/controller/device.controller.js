@@ -55,6 +55,20 @@ const getDeviceByUserId = async (req, res) => {
     console.log(error);
   }
 };
+const getDeviceByCompanyId = async (req, res) => {
+  try {
+    const company_id= req.params.company_id;
+    const deviceInfo = await Device.find({ company_id: company_id });
+    // console.log(deviceInfo);
+    if (!deviceInfo) return res.status(404).json({ message: "User not found" });
+    res.status(200);
+    res.send(deviceInfo);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
 const updateDevice = async (req, res) => {
   try {
     const { ru_id } = req.params;
@@ -92,4 +106,5 @@ module.exports = {
   getDeviceByid,
   updateDevice,
   deleteDevice,
+  getDeviceByCompanyId
 };

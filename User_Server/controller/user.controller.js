@@ -6,7 +6,6 @@ const passport = require("passport");
 const SECRET_KEY = process.env.JWT_SECRET_KEY ||"hihuha";
 
 const register = async (req, res) => {
-  console.log (req.body);
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
 
@@ -17,14 +16,14 @@ const register = async (req, res) => {
     const newUser = new User({ ...req.body, password: hashPassword });
     const { _id } = await newUser.save();
     const accessToken = jwt.sign({ _id }, SECRET_KEY);
-    res.status(201).send(accessToken);
+    res.status(201).send({accessToken:accessToken, userId:_id, message:"User Created Successfully"});
   } catch (error) {
     res.status(400).send({ messages: "Could not create User" });
   }
 };
+
 const gAuthRegister = async (req, res) => {
   const { email } = req.body;
-  console.log('fromcnroller',req.body)
   const user = await User.findOne({ email: email });
 
   if (user) {
@@ -53,7 +52,7 @@ const login = async (req, res) => {
     if (!matchPass) throw new Error();
 
     const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
-    res.status(200).send({ accessToken, type: user.type, id: user._id });
+    res.status(200).send({ accessToken, type: user.type, id: user._id, profilePic : user.profilePic });
   } catch (error) {
     res.status(401).send({ messages: "Username or password is incorrect" });
   }
@@ -61,7 +60,8 @@ const login = async (req, res) => {
 
 const profile = async (req, res) => {
   try {
-    res.status(200).send(req.user);
+    const user = await User.findOne({ _id: req.params.userid });
+    res.status(200).send(user);
   } catch (error) {
     res.status(404).send({ message: "User not Found" });
   }

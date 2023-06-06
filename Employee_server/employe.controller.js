@@ -24,6 +24,32 @@ const getEmployee = async (req, res) => {
     console.log(error);
   }
 };
+//ASif
+const getAllEmployeeByCompany = async (req, res) => {
+  const {companyId} = req.params;
+  try {
+    const result = await Employee.find({company: companyId});
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
+
+const getEmployeeById = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const result = await Employee.find({_id: id});
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+};
 
 const updateEmployee = async (req, res) => {
   try {
@@ -57,6 +83,8 @@ const deleteEmployee = async (req, res) => {
 module.exports = {
   postEmployee,
   getEmployee,
+  getAllEmployeeByCompany,
   updateEmployee,
   deleteEmployee,
+  getEmployeeById
 };

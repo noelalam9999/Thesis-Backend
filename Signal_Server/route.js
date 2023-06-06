@@ -16,7 +16,7 @@ router.post("/signal/SignalSumByDateByDevices", signalcontroller.getSignalSumByD
 router.post("/signal/DevicesSumBySignalByDate", signalcontroller.getDevicesSumBySignalByDate);
 
 // router.put("/signal/:id", signalcontroller.updateSignal);
-// router.delete("/signal/:id", signalcontroller.deleteSignal);
+router.delete("/signal/:id", signalcontroller.deleteSignal);
 router.post("/accumulations", accumulationcontroller.newAccumulations);
 router.get("/accumulations", accumulationcontroller.getAccumulations);
 
