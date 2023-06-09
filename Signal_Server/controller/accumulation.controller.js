@@ -1,4 +1,5 @@
 const accumulationmodel = require("../model/accumulation.model");
+const accumulationService = require("../services/accumulation.service");
 
 
 const newAccumulations = async (req, res) => {
@@ -27,12 +28,27 @@ const getAccumulations = async (req, res) => {
   }
 };
 
+const formAccumulations = async (req, res) => {
+  try {
+    const acc = await accumulationService.formAccumulations();
+    res.status(200);
+    res.send(acc);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
+}
+
+
+
 
 
 
 
 module.exports = {
 newAccumulations,
-getAccumulations
+getAccumulations,
+formAccumulations
 
 };

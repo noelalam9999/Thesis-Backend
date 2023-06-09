@@ -1,4 +1,5 @@
 const Device = require("../model/device.model");
+const Accumulation = require("../model/accumulation.model");
 
 const postDevice = async (req, res) => {
   try {
@@ -6,6 +7,7 @@ const postDevice = async (req, res) => {
     // const deviceConfigure = { ...device.device_configure };
     // device.device_configure = JSON.stringify(deviceConfigure);
     const result = await Device.create(device);
+    await Accumulation.create(result.RU_id)
     res.status(201);
     res.send(result);
   } catch (error) {

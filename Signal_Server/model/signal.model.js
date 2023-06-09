@@ -46,6 +46,42 @@ async function getByDeviceRuId(deviceRUid){
   return await Signal.find({deviceRUid:deviceRUid});
 };
 
+async function getSignalsByTimeBrackets (dates,devices) {
+  // console.log(dates)
+  return await Signal.aggregate([
+    {
+      $facet : {
+        "categorizedByDeviceRUid" : [
+          {
+            $match : {
+            $and : [
+              {
+                time : { 
+                  $gte : new Date(dates[0]),
+                  $lte: new Date(dates[1])
+                }
+              } 
+            ] 
+          }
+        },
+        {
+          $bucket : {
+            groupBy : "$deviceRUid",
+            boundaries : devices,
+            default : "Other",
+            output : {
+              "times" : { $push : "$time"},
+              "coordinates" : { $push : "$gps"},
+              "horns" : {$push:"$horn"}
+            }
+          }
+        }
+        ]
+      }
+    },  
+  ]);
+}
+
 
 
 async function getSignalSumByDateByDevices (deviceRUids) {
@@ -141,5 +177,27 @@ async function getSignalSumByDevicesByDate (dates){
    
   ]);
 }
+async function getLastSignal (){
+  return await Signal.find({}).sort({time: -1}).limit(1);
+}
 
-module.exports = { Signal, createSignal,createSignals, getAll, getByDeviceRuId, getSignalSumByDateByDevices, getDevicesSumBySignalByDate, getSignalSumByDevicesByDate };
+// async function deleteSignals(deviceRUid,date,_id){
+//   return await Signal.deleteMany({time : {$gte:new Date(date)}})
+// }
+async function deleteSignals(){
+  return await Signal.deleteOne({_id : "6483846409a00fc525d508ac"})
+}
+
+module.exports = { 
+  Signal, 
+  createSignal,
+  createSignals, 
+  getAll, 
+  getByDeviceRuId, 
+  getSignalsByTimeBrackets,
+  getSignalSumByDateByDevices, 
+  getDevicesSumBySignalByDate, 
+  getSignalSumByDevicesByDate, 
+  deleteSignals,
+  getLastSignal 
+};

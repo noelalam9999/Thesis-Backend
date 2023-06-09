@@ -145,6 +145,19 @@ const deleteSignal = async (req, res) => {
   }
 };
 
+const deleteSignals = async (req,res) => {
+  try {
+    const { date } = req.body;
+    const result = await signalmodel.deleteSignals("1",date);
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(500);
+    res.send(error);
+    console.log(error);
+  }
+}
+
 module.exports = {
   newSignal,
   newSignals,
@@ -153,6 +166,7 @@ module.exports = {
   getSignalSumByDateByDevice,
   getSignalSumByDateByDevices,
   getDevicesSumBySignalByDate,
-  deleteSignal
+  deleteSignal,
+  deleteSignals
 
 };

@@ -7,6 +7,8 @@ const route = require("./route");
 const {Server} = require("socket.io");
 const server = http.createServer(app);
 const redis = require("redis");
+const cron = require('node-cron');
+const {formAccumulations} = require("./services/accumulation.service");
 
 require("dotenv").config();
 
@@ -20,15 +22,15 @@ const io = new Server(server, {
   },
 });
 
-let redisClient;
+// let redisClient;
 
-(async () => {
-  redisClient = redis.createClient();
+// (async () => {
+//   redisClient = redis.createClient();
 
-  redisClient.on("error", (error) => console.error(`Error : ${error}`));
+//   redisClient.on("error", (error) => console.error(`Error : ${error}`));
 
-  await redisClient.connect();
-})();
+//   await redisClient.connect();
+// })();
 
 const connectedUsers = {};
 io.on('connection', (socket) => {
@@ -45,12 +47,18 @@ io.on('connection', (socket) => {
 app.use(cors(corsConfig));
 app.io = io;
 app.connectedUsers = connectedUsers;
-app.redisClient = redisClient;
+
+// app.redisClient = redisClient;
 // module.exports = app
 app.use(express.json());
 app.use(route);
 
 (async function main() {
+
+  cron.schedule('*/15 * * * *', async () => {
+    
+  });
+
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("connected successfully");
@@ -61,4 +69,5 @@ app.use(route);
     console.log(error);
   }
 })();
+
 

@@ -14,10 +14,14 @@ router.get("/signal/:device_ru_id", signalcontroller.getSignalByRUid);
 router.post("/signal/SignalSumByDateByDevice", signalcontroller.getSignalSumByDateByDevice);
 router.post("/signal/SignalSumByDateByDevices", signalcontroller.getSignalSumByDateByDevices);
 router.post("/signal/DevicesSumBySignalByDate", signalcontroller.getDevicesSumBySignalByDate);
+router.post("/signal/deleteSignals", signalcontroller.deleteSignals);
 
 // router.put("/signal/:id", signalcontroller.updateSignal);
 router.delete("/signal/:id", signalcontroller.deleteSignal);
 router.post("/accumulations", accumulationcontroller.newAccumulations);
 router.get("/accumulations", accumulationcontroller.getAccumulations);
+router.get("/accumulations", accumulationcontroller.getAccumulations);
+router.get("/accumulations/form", accumulationcontroller.formAccumulations);
+
 
 module.exports = router;
