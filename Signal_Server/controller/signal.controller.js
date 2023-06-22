@@ -33,17 +33,17 @@ const newSignals = async (req, res) => {
     const result = await signalmodel.createSignals(req.body);
     const sumOfSignalsByDate = await signalmodel.getSignalSumByDateByDevices([result[0].deviceRUid]);  
     req.app.io.to(req.app.connectedUsers[result[0].deviceRUid]).emit('newSignal',sumOfSignalsByDate);
-    const cachedSignals = await req.app.redisClient.get("signals")
-    console.log(cachedSignals)
-    if(cachedSignals){
-      const signalsArray = await JSON.parse(cachedSignals)
-      console.log(signalsArray)
-      signalsArray = [...signalsArray, ...signals];
-      req.app.redisClient.set(signalsArray);
-    }
-    else {
-      req.app.redisClient.set("signals",JSON.stringify(result))
-    }
+    // const cachedSignals = await req.app.redisClient.get("signals")
+    // console.log(cachedSignals)
+    // if(cachedSignals){
+    //   const signalsArray = await JSON.parse(cachedSignals)
+    //   console.log(signalsArray)
+    //   signalsArray = [...signalsArray, ...signals];
+    //   req.app.redisClient.set(signalsArray);
+    // }
+    // else {
+    //   req.app.redisClient.set("signals",JSON.stringify(result))
+    // }
     res.status(201);
     
     res.send(result);

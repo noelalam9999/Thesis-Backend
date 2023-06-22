@@ -1,0 +1,2 @@
+port : 8883
+host : e60a7fae13a04a2b94a8f1a5811ac024.s2.eu.hivemq.cloud

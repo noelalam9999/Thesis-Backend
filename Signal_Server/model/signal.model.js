@@ -56,12 +56,12 @@ async function getSignalsByTimeBrackets (dates,devices) {
             $match : {
             $and : [
               {
-                time : { 
-                  $gte : new Date(dates[0]),
-                  $lte: new Date(dates[1])
+                time : {
+                  $gt : new Date(dates[0]),
+                  $lt: new Date(dates[1])
                 }
-              } 
-            ] 
+              }
+            ]
           }
         },
         {

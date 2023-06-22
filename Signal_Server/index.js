@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require('http');
+const mqtt = require("mqtt");
 const app = express();
 const cors = require('cors');
 const mongoose = require("mongoose");
@@ -9,7 +10,7 @@ const server = http.createServer(app);
 const redis = require("redis");
 const cron = require('node-cron');
 const {formAccumulations} = require("./services/accumulation.service");
-
+// const mqtt = require("./services/mqtt");
 require("dotenv").config();
 
 const corsConfig = {
@@ -36,11 +37,8 @@ const connectedUsers = {};
 io.on('connection', (socket) => {
 
   const { deviceRUid } = socket.handshake.query;
-  console.log(deviceRUid)
   connectedUsers[deviceRUid] = socket.id;
-
   console.log('device connected', socket.id);
-
   socket.once('disconnect', () => delete connectedUsers[deviceRUid]);
 });
 
@@ -48,15 +46,23 @@ app.use(cors(corsConfig));
 app.io = io;
 app.connectedUsers = connectedUsers;
 
+
+
 // app.redisClient = redisClient;
 // module.exports = app
 app.use(express.json());
 app.use(route);
 
+
+
+
+
+
+
 (async function main() {
 
   cron.schedule('*/15 * * * *', async () => {
-    
+    await formAccumulations();
   });
 
   try {
@@ -65,6 +71,8 @@ app.use(route);
     server.listen(process.env.PORT, () => {
       console.log(`Server running at http://localhost:${process.env.PORT}`);
     });
+
+   
   } catch (error) {
     console.log(error);
   }
