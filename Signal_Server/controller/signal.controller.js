@@ -3,14 +3,10 @@ const signalmodel = require("../model/signal.model");
 
 const app = require("../index");
 
-
-
-
-
 const newSignal = async (req, res) => {
   try {
-    const { deviceRUid, gps, gyro,time, horn } = req.body;
-    
+    const { deviceRUid, gps, gyro, time, horn } = req.body;
+
     const result = await signalmodel.createSignal(
       deviceRUid,
       gps,
@@ -18,7 +14,7 @@ const newSignal = async (req, res) => {
       horn,
       time
     );
-    
+
     res.status(201);
     res.send(result);
   } catch (error) {
@@ -31,8 +27,12 @@ const newSignal = async (req, res) => {
 const newSignals = async (req, res) => {
   try {
     const result = await signalmodel.createSignals(req.body);
-    const sumOfSignalsByDate = await signalmodel.getSignalSumByDateByDevices([result[0].deviceRUid]);  
-    req.app.io.to(req.app.connectedUsers[result[0].deviceRUid]).emit('newSignal',sumOfSignalsByDate);
+    const sumOfSignalsByDate = await signalmodel.getSignalSumByDateByDevices([
+      result[0].deviceRUid,
+    ]);
+    req.app.io
+      .to(req.app.connectedUsers[result[0].deviceRUid])
+      .emit("newSignal", sumOfSignalsByDate);
     // const cachedSignals = await req.app.redisClient.get("signals")
     // console.log(cachedSignals)
     // if(cachedSignals){
@@ -45,7 +45,7 @@ const newSignals = async (req, res) => {
     //   req.app.redisClient.set("signals",JSON.stringify(result))
     // }
     res.status(201);
-    
+
     res.send(result);
   } catch (error) {
     res.status(400);
@@ -68,7 +68,9 @@ const getSignal = async (req, res) => {
 
 const getSignalByRUid = async (req, res) => {
   try {
-    const signalInfo = await signalmodel.getByDeviceRuId(req.params.device_ru_id);
+    const signalInfo = await signalmodel.getByDeviceRuId(
+      req.params.device_ru_id
+    );
     res.status(200);
     res.send(signalInfo);
   } catch (error) {
@@ -79,9 +81,11 @@ const getSignalByRUid = async (req, res) => {
 };
 //For charts that need daily horn count
 const getSignalSumByDateByDevice = async (req, res) => {
-   console.log(req.body.deviceRUid)
+  console.log(req.body.deviceRUid);
   try {
-    const signalInfo = await signalmodel.getSumByDateByDevice(req.body.deviceRUid);
+    const signalInfo = await signalmodel.getSumByDateByDevice(
+      req.body.deviceRUid
+    );
     res.status(200);
     res.send(signalInfo);
   } catch (error) {
@@ -92,27 +96,30 @@ const getSignalSumByDateByDevice = async (req, res) => {
 };
 
 const getSignalSumByDateByDevices = async (req, res) => {
-  console.log(req.body.deviceRUids)
- try {
-   const signalInfo = await signalmodel.getSignalSumByDateByDevices(req.body.deviceRUids);
-   res.status(200);
-   res.send(signalInfo);
- } catch (error) {
-   res.status(400);
-   res.send(error);
-   console.log(error);
- }
+  console.log(req.body.deviceRUids);
+  try {
+    const signalInfo = await signalmodel.getSignalSumByDateByDevices(
+      req.body.deviceRUids
+    );
+    res.status(200);
+    res.send(signalInfo);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
 };
 const getDevicesSumBySignalByDate = async (req, res) => {
- try {
-   const devicesSumBySignalByDate = await signalmodel.getDevicesSumBySignalByDate(req.body.dates);
-   res.status(200);
-   res.send(devicesSumBySignalByDate);
- } catch (error) {
-   res.status(400);
-   res.send(error);
-   console.log(error);
- }
+  try {
+    const devicesSumBySignalByDate =
+      await signalmodel.getDevicesSumBySignalByDate(req.body.dates);
+    res.status(200);
+    res.send(devicesSumBySignalByDate);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+    console.log(error);
+  }
 };
 
 // const updateSignal = async (req, res) => {
@@ -145,10 +152,10 @@ const deleteSignal = async (req, res) => {
   }
 };
 
-const deleteSignals = async (req,res) => {
+const deleteSignals = async (req, res) => {
   try {
     const { date } = req.body;
-    const result = await signalmodel.deleteSignals("1",date);
+    const result = await signalmodel.deleteSignals("1", date);
     res.status(200);
     res.send(result);
   } catch (error) {
@@ -156,8 +163,22 @@ const deleteSignals = async (req,res) => {
     res.send(error);
     console.log(error);
   }
-}
-
+};
+const signalSumFromDeviceByDate = async (req, res) => {
+  try {
+    const { date, deviceRUid } = req.body;
+    const result = await signalmodel.getSignalSumFromDeviceByDate(
+      date,
+      deviceRUid
+    );
+    res.status(200);
+    res.send(result);
+  } catch (error) {
+    res.status(500);
+    res.send(error);
+    console.log(error);
+  }
+};
 module.exports = {
   newSignal,
   newSignals,
@@ -167,6 +188,6 @@ module.exports = {
   getSignalSumByDateByDevices,
   getDevicesSumBySignalByDate,
   deleteSignal,
-  deleteSignals
-
+  deleteSignals,
+  signalSumFromDeviceByDate,
 };
